@@ -1,0 +1,2843 @@
+# Upgrade notes for version v8.0.0.1:
+
+1. There are a few table structure changes for facing audit module.
+	- With new version 8.0.0.0, facing audit result is captured by brand instead of sub brand. 
+	- Hence, existing facing captured under sub-brand will be aggregated under their brand. The affected tables are TXN_MERC_FACINGAUDITPRD and RPT_MERC_FACINGAUDIT.
+	- TXN_MERC_FACINGAUDITPRD table will have zero total facing of category (TTL_FVALUE) and zero facing percentage (VALUE) for existing facing whereas
+	- RPT_MERC_FACINGAUDIT table will sum up the total existing facing under each category as the total facing of category (TTL_FVALUE) and calculated out a facing percentage (VALUE)
+	- Existing facing captured from HHT will not able to submit to server. Project team need to manually handle the migration for the failed txn in CA.
+	- These changes will be reflected in below CA releases: 8.0.0.0.20151116
+
+=====================================================
+Release Note For Standard DMS One Communication Agent
+=====================================================
+Date    : 20151229
+Baseline version: 8.0.0.2.20151228
+Release version	: 8.0.0.2.20151229
+Comm-Agent version : V5.0.2.3
+
+<Sung Chun>
+1. Enhancement: Merchandising module, download new data for customer not in routeplan.
+File Changed: TableSync.xml, Transaction.xml
+
+=====================================================
+Date    : 20151228
+Baseline version: 8.0.0.2.20151221
+Release version	: 8.0.0.2.20151228
+Comm-Agent version : V5.0.2.3
+
+<Weng Onn/Thomas>
+1. Enhancement - CA Performance for SLS related functions
+
+=====================================================
+Date    : 20151221
+Baseline version: 8.0.0.2.20151217A
+Release version	: 8.0.0.2.20151221
+Comm-Agent version : V5.0.2.3
+
+<Lawrence>
+1. Enhancement: Add in new field ORDPRD_INDEXto X_ORDPROMO and X_VANORDPROMO
+
+=====================================================
+Date    : 20151217
+Baseline version: 8.0.0.2.20151217
+Release version	: 8.0.0.2.20151217A
+Comm-Agent version : V5.0.2.3
+
+<Lawrence>
+1. Enhancement: Add in new field PROMO_FREQ to x_ordallocfoc and X_VANORDALLOCFOC
+
+============================================================
+Date    : 20151207
+Baseline version: 8.0.0.2.20151210
+Release version	: 8.0.0.2.20151217
+Comm-Agent version : V5.0.2.3
+
+<Teik Ee>
+0070341: All POSM Module> Unable to return matching product code in barcode scan 
+Root cause: barcode does not been downloaded to M_POSM
+Solution: download barcode to M_POSM
+File change: TableSync
+
+============================================================
+
+Date    : 20151207
+Baseline version: 8.0.0.1.20151207
+Release version	: 8.0.0.1.20151210
+Comm-Agent version : V5.0.2.3
+
+<Lawrence>
+1. 0069555: POSM>Txn no are repeated
+Root Cause: dist code not being passed
+Solution: pass in the dist code
+
+=====================================================
+Date    : 20151207
+Baseline version: 8.0.0.1.20151202
+Release version	: 8.0.0.1.20151207
+Comm-Agent version : V5.0.2.3
+
+<Lawrence>
+1. 0069244: Tablet > Return > component deduction wrong
+2. 0067614: Component > Van Sales > found insufficient for Component Prd allow save and inventory become negative( 0067904)
+Root Cause: data not being updated, because primary key not defined
+Solution: define the primary key
+S
+=====================================================
+Date    : 20151202
+Baseline version: 8.0.0.0.20151130
+Release version	: 8.0.0.1.20151202
+Comm-Agent version : V5.0.2.3
+
+<Debbie Yeo>
+1. 0069717: R77 Client: Coordinate of customer is not submit back to BO, even the detail capture in M_CUST_MAP
+Root Cause: upload M_CUST_MAP handle insert only
+Solution: This issue is related to the new customer coordinate capturing during time in.
+When message prompt to update customer coordinate will trigger new customer record update into X_CUST_MAP and further insert into MST_CUST table. The solution should be:
+1. HHT: When message prompt to update customer coordinate should apply to existing customer only. Remove the customer coordinate capturing for new customer. 
+2. CA: When upload X_CUST_MAP should handle for update only, should not handle insert update. If customer master is not in server (MST_CUST) the coordinate should not update into server.
+File Changed: Transaction.xml
+
+=====================================================
+Date    : 20151130
+Baseline version: 8.0.0.0.20151128
+Release version	: 8.0.0.0.20151130
+Comm-Agent version : V5.0.2.3
+
+<Vivian>
+1. 0069555: POSM>Txn no are repeated
+Root Cause: distributor parameter is empty when calling SCA_S_POSM_MAT_REQ
+Solution: replaced distibutor parameter with #DIST_CD#
+File Changed: Transaction.xml
+
+=====================================================
+Date    : 20151128
+Baseline version: 8.0.0.0.20151126A
+Release version	: 8.0.0.0.20151128
+Comm-Agent version : V5.0.2.3
+
+<Sung Chun>
+1. #0068860: Merchandising>Load in For Call Activities Page is slow
+Root Cause: HHT inner looping cause performance issue.
+Solution: Move HHT data preparation by downloading.
+File Changed: Transaction.xml, TableSync.xml
+
+=====================================================
+Date    : 20151126
+Baseline version: 8.0.0.0.20151126
+Release version	: 8.0.0.0.20151126A
+Comm-Agent version : V5.0.2.3
+
+<Sung Chun>
+1. #0067374: Comm Agent - Not able to upload HHT DBN
+Root Cause: Wrong method to use for upload DBN.
+Solution: Add a new column for zipFile Name and upload the DBN.
+File Changed: Transaction.xml
+
+=====================================================
+Date    : 20151126
+Baseline version: 8.0.0.0.20151124
+Release version	: 8.0.0.0.20151126
+Comm-Agent version : V5.0.2.3
+
+<Venice Chan>
+1. Issue: Re-update playbook single content if content has changed but not yet sync 
+Solution: Add new tablesync to re-update content type and name
+File Changed: Transaction.XML, TableSync.xml
+
+=====================================================
+Date    : 20151124
+Baseline version: 8.0.0.0.20151123
+Release version	: 8.0.0.0.20151124
+Comm-Agent version : V5.0.2.3
+
+<Venice Chan>
+1. Enhancement: submit JSON_CONTENT of Digital Share of Shelf
+File Changed: Transaction.XML
+
+=====================================================
+Date    : 20151123
+Baseline version: 8.0.0.0.20151120
+Release version	: 8.0.0.0.20151123
+Comm-Agent version : V5.0.2.3
+
+<Chin Tong>
+1. Enhancement: Removed LOC_CD and PRDCAT_CD at PlanogramHDR. 
+	      :	Added LOC_CD and PRDCAT_CD at PlanogramPHT.
+File Changed: Transaction.XML
+==================================================================
+Date    : 20151120
+Baseline version: 8.0.0.0.20151119A
+Release version	: 8.0.0.0.20151120
+Comm-Agent version : V5.0.2.3
+
+<Kelvin Yow>
+1. Enhancement - M_STKTAKEPRDAG table structure change, the transaction
+sync have to change in order able to sync into server.
+File Changed: Transaction.xml
+==================================================================
+Date    : 20151119
+Baseline version: 8.0.0.0.20151119
+Release version	: 8.0.0.0.20151119A
+Comm-Agent version : V5.0.2.3
+
+1. 0069252: HH -> Stock Replenishment -> No Warehouse Info display
+File Changed: TableSync.xml
+==================================================================
+Date    : 20151119
+Baseline version: 8.0.0.0.20151118A
+Release version	: 8.0.0.0.20151119
+Comm-Agent version : V5.0.2.3
+
+<Venice chan>
+1. Enhancement: Removed LOC_CD and PRDCAT_CD at TXN_MERC_FACINGAUDITHDR
+File Changed: Transaction.XML
+
+=====================================================
+Date    : 20151118
+Baseline version: 8.0.0.0.20151118
+Release version	: 8.0.0.0.20151118A
+Comm-Agent version : V5.0.2.3
+
+<Chin Tong>
+1. Enhancement: Removed LOC_CD and PRDCAT_CD at PriceAuditHDR, PromoCheckHDR. 
+	      :	Added LOC_CD and PRDCAT_CD at PriceAuditHDR, PromoCheckHDR
+File Changed: Transaction.XML
+
+=====================================================
+Date    : 20151118
+Baseline version: 8.0.0.0.20151116
+Release version	: 8.0.0.0.20151118
+Comm-Agent version : V5.0.2.3
+
+<Chin Tong>
+1. Enhancement: Removed LOC_CD and PRDCAT_CD at DistCheckHDR. 
+	      :	Added PRDCAT_CD at DistCheckPRD
+File Changed: Transaction.XML
+
+=====================================================
+Date    : 20151116
+Baseline version: 8.0.0.0.20151106
+Release version	: 8.0.0.0.20151116
+Comm-Agent version : V5.0.2.3
+
+<Venice chan>
+1. Enhancement: added new type of facing audit (digital)
+File Changed: TableSync.xml, Transaction.XML
+
+=====================================================
+Date    : 20151106
+Baseline version: 8.0.0.0.20151104
+Release version	: 8.0.0.0.20151106
+Comm-Agent version : V5.0.2.3
+
+<Kelvin Yow>
+1. Download Cust VS Percentage/ SM VS percentage
+File Changed: TableSync.xml, Transaction.XML
+=====================================================
+Date    : 20151104
+Baseline version: 8.0.0.0.20151103
+Release version	: 8.0.0.0.20151104
+Comm-Agent version : V5.0.2.3
+
+<Kelvin Yow>
+1. Remove to download DCMSL data
+File Changed: TableSync.xml, Transaction.XML
+=====================================================
+
+Date    : 20151103
+Baseline version: 8.0.0.0.20151029A
+Release version	: 8.0.0.0.20151103
+Comm-Agent version : V5.0.2.3
+
+<Kelvin Yow>
+1. Download VSKPI Detail Data
+File Changed: TableSync.xml, Transaction.XML
+=====================================================
+
+Date    : 20151029
+Baseline version: 8.0.0.0.20151029
+Release version	: 8.0.0.0.20151029A
+Comm-Agent version : V5.0.2.3
+
+<Kelvin Yow>
+1. Download customer shelf replenish case per hours data
+File Changed: TableSync.xml
+=====================================================
+Date    : 20151029
+Baseline version: 8.0.0.0.20151029
+Release version	: 8.0.0.0.20151029A
+Comm-Agent version : V5.0.2.3
+
+<Kelvin Yow>
+1. Download Distribution check VS MSL history data
+File Changed: TableSync.xml, Transaction.xml
+=====================================================
+Date    : 20151029
+Baseline version: 8.0.0.0.20151028
+Release version	: 8.0.0.0.20151029
+Comm-Agent version : V5.0.2.3
+
+<Sung Chun>
+1. Download step of call information.
+File Changed: TableSync.xml, Transaction.xml
+
+=====================================================
+Date    : 20151028
+Baseline version: 8.0.0.0.20151027
+Release version	: 8.0.0.0.20151028
+Comm-Agent version : V5.0.2.3
+
+<Debbie Yeo>
+1.0068678: Customer details>Unable to view posm details
+Root Cause: table M_POSM_CUST not downloaded
+Solution: update calldefination in ""TXN_RefreshTxnData" 
+File Change: Transaction.xml
+
+=====================================================
+Date    : 20151027
+Baseline version: 8.0.0.0.20151020
+Release version	: 8.0.0.0.20151027
+Comm-Agent version : V5.0.2.3
+
+<Kelvin Yow>
+1. Donwload VS_KPI performance / Shelf Replenishment performance
+File Changed: Transaction.xml,TableSync.xml
+=====================================================
+
+Date    : 20151020
+Baseline version: 8.0.0.0.20151006
+Release version	: 8.0.0.0.20151020
+Comm-Agent version : V5.0.2.3
+
+<Chin Tong>
+1. 5P Merchandising Distribution Check Enhancement - Sync the Audit price and facing to DB.
+File Changed: Transaction.xml
+=====================================================
+Date    : 20151006
+Baseline version: 8.0.0.0.20151006
+Release version	: 8.0.0.0.20151005
+Comm-Agent version : V5.0.2.3
+
+<Kelvin Yow>
+1. Enhancement - Add new column for PHANTOM STOCK LIST in tablesync
+	         Change column name for phantom stock list in transaction
+File Changed: Transaction.xml,TableSync.xml
+=====================================================
+
+Date    : 20151005
+Baseline version: 8.0.0.0.20151005
+Release version	: 8.0.0.0.20151002
+Comm-Agent version : V5.0.2.3
+
+<Venice chan>
+1. Enhancement - Add new transaction to download digital playbook categories and rename tablesync name
+File Changed: Transaction.xml,TableSync.xml
+
+=====================================================
+Date    : 20151002
+Baseline version: 8.0.0.0.20151002
+Release version	: 8.0.0.0.20151001B
+Comm-Agent version : V5.0.2.3
+
+<Kelvin Yow>
+1. Enhancement - Add new transaction to upload Phantom Stock txn
+Add new tableSync to download the phantom stock list
+File Changed: Transaction.xml,TableSync
+=====================================================
+Date    : 20151001
+Baseline version: 8.0.0.0.20151001A
+Release version	: 8.0.0.0.20151001B
+Comm-Agent version : V5.0.2.3
+
+<Venice chan>
+1. Enhancement - Add new transaction to upload Digital playbook txn
+File Changed: Transaction.xml
+
+=====================================================
+Date    : 20151001
+Baseline version: 8.0.0.0.20151001
+Release version	: 8.0.0.0.20151001A
+Comm-Agent version : V5.0.2.2 R20150804
+
+<Venice chan>
+1. Enhancement - Add new transaction to download single Digital playbook content
+File Changed: Transaction.xml, TableSync.xml
+
+=====================================================
+Date    : 20150929
+Baseline version: 8.0.0.0.20150929
+Release version	: 8.0.0.0.20151001
+Comm-Agent version : V5.0.2.2 R20150804
+
+<Chin Tong>
+Root Cause: Found is not sync Price Audit History Record to DB due to missing primary key to map data
+Solution: Add in the primary key for X_PRICEAUDITHIST
+File Change: Transaction.xml
+
+=====================================================
+Date    : 20150929
+Baseline version: 8.0.0.0.20150924
+Release version	: 8.0.0.0.20150929
+Comm-Agent version : V5.0.2.2 R20150804
+
+<Venice chan>
+1. Enhancement - Digital playbook download
+File Changed: Transaction.xml, TableSync.xml
+
+=====================================================
+Date    : 20150924
+Baseline version: 8.0.0.0.20150923A
+Release version	: 8.0.0.0.20150924
+Comm-Agent version : V5.0.2.2 R20150804
+
+<Lawrence >
+1. Enhancement -Vision Store Score Card
+File Changed: Transaction.xml - Add in new table TXN_VSSC_IMG
+=====================================================
+Date    : 20150923
+Baseline version: 8.0.0.0.20150923
+Release version	: 8.0.0.0.20150923A
+Comm-Agent version : V5.0.2.2 R20150804
+
+<Lawrence >
+1. Enhancement - Vision Store Score Card
+File Changed: Transaction.xml - Add in new table TXN_VSSC_IMG
+=====================================================
+Date    : 20150923
+Baseline version: 8.0.0.0.20150921
+Release version	: 8.0.0.0.20150923
+Comm-Agent version : V5.0.2.2 R20150804
+
+<Chin Tong>
+1. Enhancement - Outlet Location Checking
+File Changed: Transaction.xml - Add in the LOC_VARIANCE into X_DAILYTIMINGSUM
+=====================================================
+Date    : 20150921
+Baseline version: 8.0.0.0.20150909
+Release version	: 8.0.0.0.20150921
+Comm-Agent version : V5.0.2.2 R20150804
+
+<Lawrence>
+1. Enhancement - Vision Store Score Card
+=====================================================
+Date    : 20150909
+Baseline version: 8.0.0.0.20150908
+Release version	: 8.0.0.0.20150909
+Comm-Agent version : V5.0.2.2 R20150804
+
+<Koon Leong>
+1. Enhancement - Slsman image
+=====================================================
+
+Date    : 20150908
+Baseline version: 8.0.0.0.20150828
+Release version	: 8.0.0.0.20150908
+Comm-Agent version : V5.0.2.2 R20150804
+
+<Chin Tong>
+1. 0067484: Phone/Tablet>QTD/YTD>Did not show any value for Vision Store, MSL Compliance and Line Per Call
+Root Cause: Did not show any value for Vision Store, MSL Compliance and Line Per Call.
+Solution: Sync those data into HHT.
+File change: TableSync.xml
+=====================================================
+Date    : 20150828
+Baseline version: 8.0.0.0.20150826
+Release version	: 8.0.0.0.20150828
+Comm-Agent version : V5.0.2.2 R20150804
+
+<Chin Tong>
+1. 0062973: DCC: History function is not working in Client due to missing table M_SURVEY_HIST and data
+Root Cause: Found there is no sync method for table M_SURVEY_HIST.
+Solution: Add it in.
+File change: Transaction.xml, TableSync.xml
+=====================================================
+Date    : 20150826
+Baseline version: 8.0.0.0.20150821A
+Release version	: 8.0.0.0.20150826
+Comm-Agent version : V5.0.2.2 R20150804
+
+<Chin Tong>
+Root Cause: Found DCC survey file is not download
+Solution: call the stored Procedure to download it
+File change: Transaction.xml
+=====================================================
+Date    : 20150821
+Baseline version: 8.0.0.0.20150821
+Release version	: 8.0.0.0.20150821A
+Comm-Agent version : V5.0.2.2 R20150804
+
+<Lawrence>
+1. 0067183: R7.7Tablet/Phone>Product Images - No Images folder & not able to view Product Images in HHT
+Root Cause: stored procedure used to download customer images and prd images not being called
+Solution: call the stored Procedure
+=====================================================
+Date    : 20150821
+Baseline version: 8.0.0.0.20150820
+Release version	: 8.0.0.0.20150821
+Comm-Agent version : V5.0.2.2 R20150512
+
+<Kelvin Yow>
+1. Enhancement - Shelf Replenishment
+=====================================================
+
+Date    : 20150820
+Baseline version: 8.0.0.0.20150818A
+Release version	: 8.0.0.0.20150820
+Comm-Agent version : V5.0.2.2 R20150512
+
+<Lawrence>
+1. 0067191: Phone-Customer>Time In>Others>Ad Hoc>Reward
+Root Cause: primary key not being set causing record cannot updated
+Solution: set primary key
+
+2. 0067128: Phone-Customer>Time In>AdHoc> POSM Installation
+Root Cause: Txn used to download posm table not being called
+Solution: add back the Txn to transaction.xml
+=====================================================
+
+Date    : 20150818
+Baseline version: 7.1.1.0.20150818
+Release version	: 8.0.0.0.20150818A
+Comm-Agent version : V5.0.2.2 R20150512
+
+<Kelvin Yow>
+1. 0067146: Phone > Vision Store > submit > found that Vision Store txn is not inserted into database
+=====================================================
+
+Date    : 20150818
+Baseline version: 7.1.1.0.20150817
+Release version	: 8.0.0.0.20150818
+Comm-Agent version : V5.0.2.2 R20150512
+
+<Chin Tong>
+1. Performance (QTD,YTD) Enhancement.
+Sync 3 new tables: M_LPC_SLSMAN, M_MSL_SLSMAN, M_VS_SLSMAN
+
+=====================================================
+Date    : 20150817
+Baseline version: 7.1.1.0.20150814
+Release version	: 7.1.1.0.20150817
+Comm-Agent version : V5.0.2.2 R20150512
+
+<Lawrence Lai>
+1. Remove primary key for M_DAILYTIMINGSUM destination table
+
+=====================================================
+Date    : 20150814
+Baseline version: 8.0.0.0.20150813
+Release version	: 8.0.0.0.20150814
+Comm-Agent version : V5.0.2.2 R20150512
+
+<Kelvin Yow>
+1. Enhancement: remove market survey related txn.
+M_SURVEY
+M_SURVEYANS
+M_SURVEYCUST
+M_SURVEYPRD
+M_SURVEYQUES
+M_SURVEYSTRUC
+M_SVY_QNA_HIST
+
+=====================================================
+
+Date    : 20150813
+Baseline version: 7.1.1.0.20150805A
+Release version	: 7.1.1.0.20150813
+Comm-Agent version : V5.0.2.2 R20150512
+
+<Kelvin Yow>
+1.CA enhancement - Group the download data into different transaction
+TXN_RefreshAdminData
+TXN_RefreshMsgData
+TXN_RefreshProductData
+TXN_RefreshCustomerData
+TXN_RefreshStkTransData
+TXN_RefreshMarketSurveyData
+TXN_RefreshPromotionData
+TXN_RefreshTxnData
+TXN_RefreshPerformanceData
+TXN_RefreshImgData
+TXN_RefreshAllData
+
+=====================================================
+
+Date    : 20150805
+Baseline version: 7.1.1.0.20150805
+Release version	: 7.1.1.0.20150805A
+Comm-Agent version : V5.0.2.2 R20150512
+
+<Lawrence Lai>
+1. fixing getcountrydate semicolon missing error.
+
+=====================================================
+Date    : 20150805
+Baseline version: 7.1.1.0.20150804
+Release version	: 7.1.1.0.20150805
+Comm-Agent version : V5.0.2.2 R20150512
+
+<Venice chan>
+1. Enhancement: remove market survey related txn.
+
+=====================================================
+Date    : 20150728
+Baseline version: 7.1.1.0.20150728
+Release version	: 7.1.1.0.20150804
+Comm-Agent version : V5.0.2.2 R20150512
+
+<Lawrence>
+ Item 1: Remove Txn_key Checking(Store Procedure)
+ Item 2: Remove Primary Key
+ Item 3: Add in new session variable for dbo.getcountry date
+
+
+=====================================================
+Date    : 20150728
+Baseline version: 7.1.1.0.20150724
+Release version	: 7.1.1.0.20150728
+Comm-Agent version : V5.0.2.2 R20150512
+
+<Venice chan>
+1. Enhancement: Remove unused modules
+- market survey 
+- POSM Request 
+- POSM Maintenance
+- Agreement
+
+=====================================================
+Date    : 20150724
+Baseline version: 7.1.1.0.20150722
+Release version	: 7.1.1.0.20150724
+Comm-Agent version : V5.0.2.2 R20150512
+
+<Sung Chun>
+1. Enhance stock take module, add in facing percentage.
+
+=====================================================
+Date    : 20150722
+Baseline version: 7.1.1.0.20150720
+Release version	: 7.1.1.0.20150722
+Comm-Agent version : V5.0.2.2 R20150512
+
+<Kelvin Yow>
+1. Vision Store Score Card Enhancement
+
+=====================================================
+Date    : 20150720
+Baseline version: 7.1.1.0.20150716
+Release version	: 7.1.1.0.20150720
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Sung Chun>
+1. #0066012: Comm Agent - Not able to upload HHT DBN
+Root Cause: Incorrect definition in CA.
+Solution: Change the definition.
+
+=====================================================
+Date    : 20150716
+Baseline version: 7.1.1.0.20150715
+Release version	: 7.1.1.0.20150716
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Sung Chun>
+1. #0066012: Comm Agent - Not able to upload HHT DBN
+Root Cause: Incorrect definition in CA.
+Solution: Change the definition.
+
+=====================================================
+Date    : 20150715
+Baseline version: 7.1.1.0.20150714C
+Release version	: 7.1.1.0.20150715
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Kelvin Yow>
+1.Enhancement - Add Default DE_IND = N when sync Vision store score card transaction
+=====================================================
+Date    : 20150714
+Baseline version: 7.1.1.0.20150714B
+Release version	: 7.1.1.0.20150714C
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Chin Tong>
+1.Enhancement - Sync the Missed Mandatory Transaction record back to DB
+=====================================================
+Date    : 20150714
+Baseline version: 7.1.1.0.20150714A
+Release version	: 7.1.1.0.20150714B
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Kelvin Yow>
+1.Enhancement - Add Default DE_IND = N when sync Vision store score card transaction
+=====================================================
+
+Date    : 20150714
+Baseline version: 7.1.1.0.20150714
+Release version	: 7.1.1.0.20150714A
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Venice chan>
+Enhancement: new table M_CUST_MSL to download in CA
+
+=====================================================
+Date    : 20150714
+Baseline version: 7.1.1.0.20150713
+Release version	: 7.1.1.0.20150714
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Lawrence>
+1.Enhancement - Add in VISIT_DT AND SALES_CALMTH into M_CUSTDAYTAR
+=====================================================
+Date    : 20150713
+Baseline version: 7.1.1.0.20150710
+Release version	: 7.1.1.0.20150713
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Sung Chun>
+1. #0066067: Van Sales/ Sales Order > found newly setup promo didnt get promo incon display next to the assigned product
+Root Cause: Preparing done in HHT cause application hang when time in customer.
+Solution: Move the preparation to DB when download to CA.
+File Changed: TableSync.xml, Transaction.xml
+
+=====================================================
+Date    : 20150710
+Baseline version: 7.1.1.0.20150706A
+Release version	: 7.1.1.0.20150710
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Sung Chun>
+1. Remove unwanted details part in TXN_VSSC to avoid error.
+
+=====================================================
+Date    : 20150706
+Baseline version: 7.1.1.0.20150706
+Release version	: 7.1.1.0.20150706A
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Kelvin Yow>
+Enahancement - Upload the Vision store score card transaction target score
+=====================================================
+
+Date    : 20150706
+Baseline version: 7.1.1.0.20150702B
+Release version	: 7.1.1.0.20150706
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Lawrence>
+1.0065779: Stock Take RB > found signature is not store in database
+Root Cause: CA table destination file, primary key not being set
+Solution: set primary key on table destination file
+
+=====================================================
+Date		: 20150702
+Baseline version: 7.1.1.0.20150702A
+Release version	: 7.1.1.0.20150702B
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Chin Tong>
+1.0065601: Customer > POSM > alignment issue after expand, no show POSM desc, UOM
+Root Cause: Found did not sync down the POSM desc and its UOM code
+Solution: Get the POSM desc and its UOM code
+File Changed: TableSync
+
+=====================================================
+Date		: 20150702
+Baseline version: 7.1.1.0.20150702
+Release version	: 7.1.1.0.20150702A
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Lawrence Lai>
+1. 0065779: PHOTO > Stock Take RB > found signature is not store in database
+Root cause:  transaction file  - signature  source field attribute not set to B  , destination field attribute do not have primary key
+Solution: set  signature  source field attribute to B , set primary key for destination file
+File Changed: Transaction
+=====================================================
+Date		: 20150702
+Baseline version: 7.1.1.0.20150701
+Release version	: 7.1.1.0.20150702
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Lawrence Lai>
+1. download new table M_MTHCUST
+File Changed: TableSync, Transaction
+=====================================================
+Date		: 20150701
+Baseline version: 7.1.1.0.20150629
+Release version	: 7.1.1.0.20150701
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Sung Chun>
+1. Download vision score indicator to MSL product.
+2. Stock Take - Remove QTY_NEEDED_FLAG and replace with VS_FLAG.
+
+<Lawrence Lai>
+1. add in MISS_TXN_REA_CD and MISS_TXN_RMK into X_DAILYTIMINGSUM.
+=====================================================
+Date		: 20150629
+Baseline version: 7.1.0.0.20150625A
+Release version	: 7.1.0.0.20150629
+Comm-Agent version : V5.0.2.1 R20150116
+
+
+<Chin Tong>
+1. add in VISION_STORE into M_CUST
+=====================================================
+
+Date		: 20150625
+Baseline version: 7.1.0.0.20150625
+Release version	: 7.1.0.0.20150625A
+Comm-Agent version : V5.0.2.1 R20150116
+
+
+<Lawrence Lai>
+1. add in CUST_CD into M_PRFMHDR_CUST
+=====================================================
+Date		: 20150625
+Baseline version: 7.1.0.0.20150624
+Release version	: 7.1.0.0.20150625
+Comm-Agent version : V5.0.2.1 R20150116
+
+
+<Weng Onn>
+1. Enhancements - Non-Customer performance indicator - Add Field NON_PRFM_FLAG in SCA_M_CUST_REFRESH
+=====================================================
+Date		: 20150624
+Baseline version: 7.1.0.0.20150622A
+Release version	: 7.1.0.0.20150624
+Comm-Agent version : V5.0.2.1 R20150116
+
+
+<Kelvin Yow>
+1. Enhancements - Vision Store Score Card - Change Table Name
+=====================================================
+Date		: 20150622
+Baseline version: 7.1.0.0.20150622
+Release version	: 7.1.0.0.20150622A
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Kelvin Yow>
+1. Enhancements - Vision Store Score Card
+
+File Changed TableSync   : Add TXN_VSSC
+File Changed Transaction : Add M_VSHDR,M_VSDTL,M_MSL_HIST,W_LASTVSSCHDR,W_LASTVSSCDTL
+=====================================================
+Date		: 20150622
+Baseline version: 7.1.1.0.20150619B
+Release version	: 7.1.1.0.20150622
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Lawrence>
+1. Enhancement - remove SLSMAN_OPRTYPE from M_TEMPLATE
+=====================================================
+Date		: 20150619
+Baseline version: 7.1.1.0.20150619A
+Release version	: 7.1.1.0.20150619B
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Sung Chun>
+1. Enhancement - Add TXN_SlsTxn_StkTake_RB.
+
+=====================================================
+Date		: 20150619
+Baseline version: 7.1.1.0.20150619
+Release version	: 7.1.1.0.20150619A
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Lawrence Lai>
+1. Enhancement - add in M_VSSCORE_MTD
+File Changed: Transaction, TableSync
+=====================================================
+Date		: 20150619
+Baseline version: 7.1.1.0.20150618A
+Release version	: 7.1.1.0.20150619
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Sung Chun>
+1. Enhancement - Add PRDCAT_CD_H and PRDCAT_DESC_H into M_PRD.
+
+=====================================================
+Date		: 20150618
+Baseline version: 7.1.0.0.20150618
+Release version	: 7.1.1.0.20150618A
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Venice chan>
+1. Enhancements - add in M_LINEPERCALL,M_SLSMAN_MSL and M_VSSCORE_PERF
+File Changed: Transaction, TableSync
+=====================================================
+Date		: 20150618
+Baseline version: 7.1.0.0.20150616
+Release version	: 7.1.0.0.20150618
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Lawrence Lai>
+1. Enhancements - add in M_CUSTDAYTAR and M_PRFMHDR_CUST
+File Changed: Transaction, TableSync
+=====================================================
+Date		: 20150616
+Baseline version: 7.1.0.0.20150615
+Release version	: 7.1.0.0.20150616
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Lawrence Lai>
+1. Enhancements - add in M_SLSMANMENU and M_TEMPLATE
+File Changed: Transaction, TableSync
+=====================================================
+Date		: 20150615
+Baseline version: 7.1.0.0.20150529
+Release version	: 7.1.0.0.20150615
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Kelvin Yow>
+1. Enhancements - Merchandising Activities
+File Changed: Transaction, TableSync
+=====================================================
+Date		: 20150615
+Baseline version: 7.1.0.0.20150529
+Release version	: 7.1.0.0.20150615
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Kelvin Yow>
+1. Enhancements - Merchandising Activities
+File Changed: Transaction, TableSync
+=====================================================
+Date		: 20150529
+Baseline version: 7.1.0.0.20150505
+Release version	: 7.1.0.0.20150529
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Sung Chun>
+1. Download smallest uom level for inventory.
+File Changed: M_PRD_ACT_X_PAR
+
+=====================================================
+Date		: 20150505
+Baseline version: 7.1.0.0.20150430
+Release version	: 7.1.0.0.20150505
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Lawrence Lai>
+1. 0063744: PHOTO > MST > Customer > found default photo from HHT is not sync down to BO
+Root Cause: index use as key causing the error
+Solution: use pic name(unique) as key
+
+======================================================
+Date		: 20150430
+Baseline version: 7.1.0.0.20150421
+Release version	: 7.1.0.0.20150430
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Lawrence Lai>
+1. Enchancement: Add in Status field for X_CUST_IMG
+
+======================================================
+Date		: 20150421
+Baseline version: 7.1.0.0.20150417
+Release version	: 7.1.0.0.20150421
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Teik Ee>
+0063001: BO/ DB (Call Reschedule) >save Resheduled custs failed to submit to BO,& Sequence of custs saved in HH not stored in BO (NOT OK)
+Root cause: Destination table setup 
+Solution: since destination record updated by SP, destination does not need to setup.
+File Change: Transaction
+
+
+======================================================
+Date		: 20150417
+Baseline version: 7.1.0.0.20150416
+Release version	: 7.1.0.0.20150417
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Lawrence Lai>
+1.0063230: PHOTO > found photo captured in HHT is npt submit back to back Office
+Root Cause: synconvertion not set to A causing sql can't select record in BO
+Solution: Set to A when upload back to BO
+File Change: Transaction
+
+===========================================
+
+Date		: 20150416
+Baseline version: 7.1.0.0.20150415
+Release version	: 7.1.0.0.20150416
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Teik Ee>
+1.0063013: HH (Call Reschedule) > 'Reschedule To' date listing should be 30 days (starting frm tomorrow) minus non-working days
+Root Cause: Working days and Holiday wasn't filter out from reschedule to list
+Solution: Download the available reschedule date
+File Change: TableSync,Transaction
+
+===========================================
+
+Date		: 20150415
+Baseline version: 7.1.0.0.20150414
+Release version	: 7.1.0.0.20150415
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Lawrence Lai>
+Enhancement- M_CUST_IMAGES add in before action
+
+=============================================
+Date		: 20150414
+Baseline version: 7.1.0.0.20150410
+Release version	: 7.1.0.0.20150414
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Lawrence Lai>
+Enhancement- M_CUST_IMAGES table add new fields
+
+=============================================
+
+Date		: 20150410
+Baseline version: 7.1.0.0.20150407
+Release version	: 7.1.0.0.20150410
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Teik Ee>
+Call Reschedule phase 2 enhancement
+File change: Transaction
+
+=============================================
+
+Date		: 20150407
+Baseline version: 7.1.0.0.20150406
+Release version	: 7.1.0.0.20150407
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Lawrence Lai>
+1. 0063025: PHOTO > Agreement Compliance > record is not submit back to BO ( CA log)
+Root Cause: refering to wrong table
+File Changed: Transaction
+
+==========================================
+Date		: 20150406
+Baseline version: 7.1.0.0.20150324
+Release version	: 7.1.0.0.20150406
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Lawrence Lai>
+1. Enchancements - Customer photo Capturing
+File Changed: Transaction
+
+==========================================
+
+Date		: 20150324
+Baseline version: 7.1.0.0.20150323
+Release version	: 7.1.0.0.20150324
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Teik Ee>
+1. Enchancements - Call Reschedule
+File Changed: Transaction, TableSync
+
+==========================================
+
+Date		: 20150323
+Baseline version: 7.1.0.0.20150319
+Release version	: 7.1.0.0.20150323
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Lawrence>
+1. Enchancements - merc photo captuting
+File Changed: Transaction
+=============================================
+Date		: 20150319
+Baseline version: 7.1.0.0.20150318
+Release version	: 7.1.0.0.20150319
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Lawrence>
+1. Enchancements - signature
+File Changed: Transaction
+=============================================
+Date		: 20150318
+Baseline version: 7.1.0.0.20150309
+Release version	: 7.1.0.0.20150318
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Jess BeeTin>
+1. Create new transaction to download target qty [M_PRFMPRDCAT_CUST]
+File Changed: TableSync, Transaction
+=============================================
+Date		: 20150309
+Baseline version: 7.1.0.0.20150212A
+Release version	: 7.1.0.0.20150309
+Comm-Agent version : V5.0.2.1 R20150116
+
+<Lawrence Lai>
+1. add new column TAX_DESC for M_GSTTAX
+File Changed: TableSync
+=============================================
+
+Date		: 201502112
+Baseline version: 7.0.0.1.20150212
+Release version	: 7.1.0.0.20150212A
+Comm-Agent version : V5.0.2.1 R20150116
+
+
+<Lawrence Lai>
+1. add new column MY_TAX_CD  for TXN_ORDPRD
+File Changed: Transaction.xml
+====================================
+Date		: 201502112
+Baseline version: 7.0.0.1.20150211
+Release version	: 7.1.0.0.20150212
+Comm-Agent version : V5.0.2.1 R20150116
+
+
+<Lawrence Lai>
+1. add new column MY_TAX_CD  for x_orprd to upload back to BO(TXN_SlsTxn_VanOr)
+File Changed: Transaction.xml
+
+====================================
+Date		: 201502111
+Baseline version: 7.0.0.1.20150210
+Release version	: 7.1.0.0.20150211
+Comm-Agent version : V5.0.2.1 R20150116
+
+
+<Lawrence Lai>
+1. add new column MY_TAX_CD  for x_orprd to upload back to BO
+File Changed: Transaction.xml
+
+====================================
+Date		: 20150210
+Baseline version: 7.0.0.1.20150202
+Release version	: 7.1.0.0.20150210
+Comm-Agent version : V5.0.2.1 R20150116
+
+
+<Lawrence Lai>
+1. add new column MY_TAX_CD for M_PRD table	
+2. Dowload new table M_GSTTAX
+File Changed: TableSync.xml
+
+1. add new column MY_TAX_CD  for uploading back to BO
+File Changed: Transaction.xml
+=============================================
+Date		: 20150202
+Baseline version: 7.0.0.1.20150129
+Release version	: 7.1.0.0.20150202
+Comm-Agent version : V5.0.2.1 R20150116
+
+
+<weng Onn>
+Changed version to 7.1.0.0
+Comm-Agent version changed to V5.0.2.1 R20150116
+
+====================================
+Date		: 20150129
+Baseline version: 7.0.0.1.20150120
+Release version	: 7.0.0.1.20150129
+Comm-Agent version : V5.0.2.0 R20141120
+
+<Chin Tong>
+1. 0060899: AST_CLTXNDTL did not store value as what I submitted from HHT for Trade Asset Auditing
+Root Cause: Found AST_CLTXNDTL did not store value as what I submitted from HHT for Trade Asset Auditing
+Solution: Remove the unnecessary data field to make it able to submit to BO.
+File Changed: Transaction.xml
+=====================================================
+
+Date		: 20150120
+Baseline version: 7.0.0.1.20150113
+Release version	: 7.0.0.1.20150120
+Comm-Agent version : V5.0.2.0 R20141120
+
+<Weng Onn>
+Comm Agent Enhancement, added back checking and delete statement for TXN_PRICEAUDIT and TXN_ORDHRD table.
+File Changed: Transaction.xml
+=====================================================
+Date		: 20150113
+Baseline version: 7.0.0.1.20150109
+Release version	: 7.0.0.1.20150113
+Comm-Agent version : V5.0.2.0 R20141120
+
+<Lawrence>
+1. Transaction > Return > found the tax calculation in Edit screen is different in ( Add, View screen) -cause by client record
+Solution: add new column TAX_ACC_IND to save tax accumulative in dbn X_ORDPRD
+File Changed: Transaction.xml
+
+=====================================================
+Date		: 20150109
+Baseline version: 7.0.0.1.20150108
+Release version	: 7.0.0.1.20150109
+Comm-Agent version : V5.0.2.0 R20141120
+
+<Weng Onn>
+Comm Agent Enhancement, remove checking and delete statement for TXN_PRICEAUDIT and TXN_ORDHRD table.
+File Changed: Transaction.xml
+====================================================
+Date		: 20150108
+Baseline version: 7.0.0.1.20150106
+Release version	: 7.0.0.1.20150108
+Comm-Agent version : V5.0.2.0 R20141120
+
+<Venice chan>
+1. Van Sales/ Sales order Issue: Tax accumulative is not stored and submitted to server. Related mantis 0060395
+Solution: add new column TAX_ACC_IND to save tax accumulative in dbn X_VANORDHDR, X_VANORDPRD, X_ORDHDR, X_ORDPRD
+File Changed: Transaction.xml
+
+=====================================================
+Date		: 20150106
+Baseline version: 7.0.0.0.20141215
+Release version	: 7.0.0.1.20150106
+Comm-Agent version : V5.0.2.0 R20141120
+
+<weng onn>
+Changed versioning to 7.0.0.1
+===========================================================
+Date		: 20141215
+Baseline version: 7.0.0.0.20141212
+Release version	: 7.0.0.0.20141215
+Comm-Agent version : V5.0.2.0 R20140904
+
+<Teik Ee>
+1. Add in new field for m_outletnote table
+File Changed: TableSync.xml,Transaction.xml
+
+==============================================================
+Date		: 20141212
+Baseline version: 7.0.0.0.20141210
+Release version	: 7.0.0.0.20141212
+Comm-Agent version : V5.0.2.0 R20140904
+
+<Teik Ee>
+1. 0060098: Client > Return > found record is not sync back to Back Office ( error.log)
+Root cause: Transation for return has invalid columns
+Solution: Remove the invalid columns
+
+==============================================================
+
+Date		: 20141210
+Baseline version: 7.0.0.0.20141204
+Release version	: 7.0.0.0.20141210
+Comm-Agent version : V5.0.2.0 R20140904
+
+<Teik Ee>
+1. 0059850: Sales Order/ Van Sales > Copy > found able edit component associate after copy together with parent product
+Root cause: unable to syn record for parent_prd and parent_uom
+Solution: Select Parent_prd and Parent_uom from SCA_M_ORDPRD_REFRESH
+
+=========================================================
+Date		: 20141204
+Baseline version: 7.0.0.0.20141203A
+Release version	: 7.0.0.0.20141204
+Comm-Agent version : V5.0.2.0 R20140904
+
+<Teik Ee>
+Added PARENT_UOM for Van Sales and Return
+File Changed: Transaction.xml
+
+=======================================================================
+Date		: 20141203
+Baseline version: 7.0.0.0.20141203
+Release version	: 7.0.0.0.20141203A
+Comm-Agent version : V5.0.2.0 R20140904
+
+<Teik Ee>
+1. 0059849: Sales Order > datadic not updated , should have TXN_ORDPRD.PARENT_UOM?
+Root cause: PARENT UOM does not update to table TXN_ORDPRD
+Solution: Insert PARENT_UOM record to table TXN_ORDPRD
+
+=========================================
+
+Date		: 20141203
+Baseline version: 7.0.0.0.20141201
+Release version	: 7.0.0.0.20141203
+Comm-Agent version : V5.0.2.0 R20140904
+
+<Teik Ee>
+Enhancement: Empties Return
+Enhancement: Empties Van Sales
+File Changed: Transaction.xml
+
+========================================
+
+Date		: 20141201
+Baseline version: 7.0.0.0.20141201
+Release version	: 7.0.0.0.20141201A
+Comm-Agent version : V5.0.2.0 R20140904
+
+<Teik Ee>
+Enhancement: Summary Outlet Notes
+File Changed: TableSync.xml
+
+===============================================
+
+Date		: 20141201
+Baseline version: 7.0.0.0.20141125
+Release version	: 7.0.0.0.20141201
+Comm-Agent version : V5.0.2.0 R20140904
+
+<Teik Ee>
+Enhancement: Empties Sales Order
+File Changed: Transaction.xml
+
+==================================================
+
+Date		: 20141125
+Baseline version: 7.0.0.0.20141121A
+Release version	: 7.0.0.0.20141125
+Comm-Agent version : V5.0.2.0 R20140904
+
+<Sung Chun>
+1. #0059428: R7.5 Tablet/Phone > INDIA > Customer > Sales order - no product display
+Root Cause: Data not tally with structure.
+Solution: Correct the download data structure and application dbn structure.
+File Changed: TableSync.xml
+
+=====================================================
+Date		: 20141121
+Baseline version: 7.0.0.0.20141121
+Release version	: 7.0.0.0.20141121A
+Comm-Agent version : V5.0.2.0 R20140904
+
+<Sung Chun>
+1. #0058892: HHT INDIA > First Login - Unable to download successfully if Dist Cd contain small letter
+Root Cause: Checking on case sensitive cause the blocking.
+Solution: Remove the case sensitive checking.
+File Changed: Transaction.xml > TXN_Setup_Slsman
+
+=====================================================
+Date		: 20141121
+Baseline version: 7.0.0.0.20141105
+Release version	: 7.0.0.0.20141121
+
+<Teik Ee>
+Enhancement: Outlet Note
+File Changed: Transaction.xml
+
+================================================
+Date		: 20141105
+Baseline version: 7.0.0.0.20141104
+Release version	: 7.0.0.0.20141105
+
+<Venice Chan>
+Enhancement : (Empties) Add new transactions TXN_StkTxn_CompInvt and TXN_StkTxn_CompInvtHist
+File Changed: Transaction.xml
+
+=====================================================
+Date		: 20141104
+Baseline version: 6.2.0.2.20140930
+Release version	: 7.0.0.0.20141104
+
+<Venice Chan>
+Enhancement (Empties)
+- add CRATE_IND column in M_PRDUOM
+- add new transaction for M_PRDCOMPO
+File Changed: Transaction.xml,TableSync.xml
+
+=====================================================
+Date		: 20140930
+Baseline version: 6.2.0.2.20140929
+Release version	: 6.2.0.2.20140930
+
+<Sung Chun>
+1. #0058181: Comm Agent>Error log have log error regarding survey that The transaction data is not inserted into database properly
+Root Cause: Missing Freq value to upload for survey history.
+Solution: Add back the value FREQ.
+
+=====================================================
+Date		: 20140929
+Baseline version: 6.2.0.2.20140926
+Release version	: 6.2.0.2.20140929
+
+<Ciew Lun>
+1. 	0058039: CA log contains multiple error for TXN_MERC_AGREETPHDR
+Root Cause: Column NO_COMP_TIMES is removed from table TXN_MERC_AGREETPHDR during plug in Trade program module to STD, but CA & Client still having this column on TXN_UpdateAgrTP
+Solution: Confirmed TXN_UpdateAgrTP is not usable, remove from Client and CA component
+
+=====================================================
+Date		: 20140926
+Baseline version: 6.2.0.2.20140925
+Release version	: 6.2.0.2.20140926
+
+<Lawrence Lai>
+0057927: issue 5 - the actual time is reduced once the checking is being inactivated
+0057909: issue 5 - the actual time is reduced once the checking is being inactivated
+0057926: issue 5 - the actual time is reduced once the checking is being inactivated
+0057881: issue 5 - the actual time is reduced once the checking is being inactivated
+
+Root Cause: - inactive actual time will be filtered out
+Solution: include the inactive record actual time during summation for actual time.
+File Changed: Transaction.xml,TableSync.xml
+
+=====================================================
+Date		: 20140925
+Baseline version: 6.2.0.2.20140923
+Release version	: 6.2.0.2.20140925
+
+<Ciew Lun>
+0058017: HH > Found previous delegation slsman been removed after refresh if back office assign a new route or unassign
+Root Cause: M_DELEGATION is not downloaded into HHT, so Client app is not able to compare the latest delegation, thus treat it as unassigned salesman, and delete all current salesman
+Solution: Make sure M_DELEGATION is downloaded during Refresh
+Changed: Transaction.xml
+=====================================================
+Date		: 20140923
+Baseline version: 6.2.0.2.20140918
+Release version	: 6.2.0.2.20140923
+
+<Lawrence Lai>
+1. 0057881: R7HHT - issue2
+2. 0057909: R7HHT - issue2
+
+Root Cause: TXN_RActivity -   PRDCAT_CD NOT SET AS PRIMARY key causing records can't be inserted.
+Solution: set PRDCAT_CD as primary key
+File Changed: Transaction.xml
+=====================================================
+
+Date		: 20140922
+Baseline version: 6.2.0.2.20140918
+Release version	: 6.2.0.2.20140922
+
+<Ciew Lun>
+1. Solve TXN_NEWCUST_GEO Upload Issue
+Changed: Transaction.XML
+=====================================================
+Date		: 20140922
+Baseline version: 6.2.0.2.20140918
+Release version	: 6.2.0.2.20140922
+
+<Sung Chun>
+1. Update New customer upload transaction.
+File Changed: Transaction.xml, TableSync.xml
+
+=====================================================
+Date		: 20140918
+Baseline version: 6.2.0.2.20140912
+Release version	: 6.2.0.2.20140918
+
+<Lawrence Lai>
+1. #0056853: Merchandising>Merchandising Activity>Distribution Check>Not all Same product with different location is sent up to BO.
+Root Cause: TXN_MERC_PRICEAUDITHDR ,TXN_MERC_DISTCHECKHDR ,TXN_MERC_FACINGAUDITHDR  LOC_CD NOT SET AS PRIMARY key causing records can't be inserted.
+Solution: set loc_cd as primary key
+File Changed: Transaction.xml
+=====================================================
+Date		: 20140912
+Baseline version: 6.2.0.2.20140911
+Release version	: 6.2.0.2.20140912
+
+<Ciew Lun>
+M_CUST_NODE, Remove Column TAX_IND as Direct Compare the India Taxation Geo-Tree at Client Side
+Changed: TableSync.xml
+=====================================================
+Date		: 20140911
+Baseline version: 6.2.0.2.20140909A
+Release version	: 6.2.0.2.20140911
+
+<Lawrence Lai>
+1.Phone enhancement Add new location (Facing Audit, Promo Compliance) 
+File Changed: Transaction.xml, TableSync.xml
+=====================================================
+Date		: 20140909
+Baseline version: 6.2.0.2.20140909
+Release version	: 6.2.0.2.20140909A
+
+<Ciew Lun>
+Download M_CUST_NODE
+File Changed: Transaction.xml, TableSync.xml
+=====================================================
+Date		: 20140909
+Baseline version: 6.2.0.2.20140905
+Release version	: 6.2.0.2.20140909
+
+<Lawrence Lai>
+1.Phone enhancement Add new location (Price Audit, Dist Check)
+File Changed: Transaction.xml, TableSync.xml
+=====================================================
+Date		: 20140905
+Baseline version: 6.2.0.2.20140903
+Release version	: 6.2.0.2.20140905
+
+<Sung Chun>
+1. Download more data to dynamic call card and market survey history.
+File Changed: Transaction.xml, TableSync.xml
+
+=====================================================
+Date		: 20140903
+Baseline version: 6.2.0.2.20140902
+Release version	: 6.2.0.2.20140903
+
+<Sung Chun>
+1. Rework on Planogram module and download more data to M_PLANO_HIST
+File Changed: Transaction.xml, TableSync.xml
+
+=====================================================
+Date		: 20140902
+Baseline version: 6.2.0.2.20140827
+Release version	: 6.2.0.2.20140902
+
+<Ciew Lun>
+Remove Customer Birthday Download From SCA_M_CUST_REFRESH in table sync.
+Changed: TableSync.xml
+=====================================================
+Date		: 20140827
+Baseline version: 6.2.0.0.20140818
+Release version	: 6.2.0.2.20140827
+
+<Sung Chun>
+1. Add new column to route activity dbn.
+File Changed: TableSync
+
+2. Add new column to upload accumulate actual time.
+File Changed: Transaction
+
+=====================================================
+Date		: 20140818
+Baseline version: 6.2.0.0.20140815
+Release version	: 6.2.0.0.20140818
+
+<Sung Chun>
+1. Add new DBN to keep track survey activity.
+File Changed: Transaction.xml, TableSync.xml
+
+=====================================================
+Date		: 20140815
+Baseline version: 6.2.0.0.20140814
+Release version	: 6.2.0.0.20140815
+
+0053655: R7Phone > Found this version break, not able add for salesman delegation ( valid slsman cd)
+Root Cause: TXN_Setup_Delegate> Response, Field Name="#Status# is missing
+Solution: Add in the missing #Status# Variable during CA Engine Upgrade.
+File Changed: Transaction.xml
+=====================================================
+Date		: 20140814
+Baseline version: 6.2.0.0.20140806
+Release version	: 6.2.0.0.20140814
+
+<Ciew Lun>
+1. TXN_Survey_QnA, Upload Salesman Information by using M_SETUP_SLSMAN instead of TMP_SETUP_SLSMAN
+File Changed: Transaction.xml
+=====================================================
+Date		: 20140806
+Baseline version: 6.2.0.0.20140805
+Release version	: 6.2.0.0.20140806
+
+<Sung Chun>
+1. #0056419: India: Summary > Return > data is 0 in header tab, Field <MRP> is not defined in table <M_Custoinvprd>
+Root Cause: Column name is too long.
+Solution: Rename the column name for M_CUSTSOINVPRD table.
+File Changed: TableSync.xml
+
+=====================================================
+Date		: 20140805
+Baseline version: 6.2.0.0.20140730
+Release version	: 6.2.0.0.20140805
+
+<Sung Chun>
+1. Add new DBN to keep track merchandising activity status.
+DBN Added: M_MERC_ACTHIST
+File Changed: Transaction.xml, TableSync.xml
+
+=====================================================
+Date		: 20140730
+Baseline version: 6.2.0.0.20140724A
+Release version	: 6.2.0.0.20140730
+
+<Sung Chun>
+1. Add new DBN and submission for planogram new logic to keep track activity history.
+File Changed: Transaction.xml, TableSync.xml
+
+=====================================================
+Date		: 20140724
+Baseline version: 6.2.0.0.20140724
+Release version	: 6.2.0.0.20140724A
+
+<Sung Chun>
+1. #0056419: India: Summary > Return > data is 0 in header tab, Field <MRP> is not defined in table <M_Custoinvprd>
+Root Cause: Did not download india taxation field.
+Solution: Download the new field accordingly for india taxation.
+File Changed: Transaction.xml, TableSync.xml
+
+=====================================================
+Date		: 20140724
+Baseline version: 6.2.0.0.20140722
+Release version	: 6.2.0.0.20140724
+
+<Sung Chun>
+1. India Taxation: Add column for HHT Return X_RETHDR,X_RETPRD,X_RETPRD_TAX,X_NOTEHDR,X_NOTEPRD and new table X_NOTEPRD_TAX
+Changed: Transaction.xml
+
+=====================================================
+Date		: 20140722
+Baseline version: 6.2.0.0.20140721
+Release version	: 6.2.0.0.20140722
+
+<Ciew Lun>
+Add Column MRP For Table Sync M_ORDPRD
+Chagned: TableSync
+=====================================================
+Date		: 20140721
+Baseline version: 6.2.0.0.20140716
+Release version	: 6.2.0.0.20140721
+
+<Sung Chun>
+1. India Taxation: Add column for HHT Return X_RETHDR,X_RETPRD and new table X_RETPRD_TAX
+Changed: Transaction.xml
+
+=====================================================
+Date		: 20140716
+Baseline version: 6.2.0.0.20140708
+Release version	: 6.2.0.0.20140716
+
+<Ciew Lun>
+1. India Taxation: Van Sales Order, Upload New Column For X_VANORDHDR, X_VANORDPRD, and new Table to Upload X_VANORDPRD_TAX
+
+Changed: Transaction.xml
+=====================================================
+Date		: 20140708
+Baseline version: 6.2.0.0.20140627
+Release version	: 6.2.0.0.20140708
+
+<Ciew Lun>
+1. India Taxation: Sales Order, Upload New Column For X_ORDHDR, X_ORDPRD, and new Table to Upload X_ORDPRD_TAX
+=====================================================
+Date		: 20140627
+Baseline version: 6.2.0.0.20140619
+Release version	: 6.2.0.0.20140627
+
+<Sung Chun>
+1. Add new table sync for india tax.
+Table Sync Changed: M_CUST, M_PRD
+Table Sync Added: M_PRDMRP, M_ITAX_RATE, M_ITAX_MMRHDR, M_ITAX_MMRDTL,
+				  M_ITAX_TSHDR, M_ITAX_TSDTL, M_ITAX_TSASS, M_ITAX_TSPRD
+
+<Ciew Lun>
+1. Transaction.XML RefreshAll, Call 8 Table Sync that newly added by sung chun above.
+Changed: Transaction.xml
+=====================================================
+Date		: 20140619
+Baseline version: 6.2.0.0.20140522
+Release version	: 6.2.0.0.20140619
+
+<Felix>
+1. Add PRD_TYPE for M_PRD_ACT_X_PAR
+File Change: TableSync.xml
+
+=====================================================
+Release Note For Standard DMS One Communication Agent
+=====================================================
+Date		: 20140522
+Baseline version: 6.2.0.0.20140519
+Release version	: 6.2.0.0.20140522
+
+<Brandon>
+1. #0053125: POSM install/remove/maintenance > realise that no record inserted into INVT_TEMP
+   Solution: Fix salesman code retrieve using M_SETUP_SLSMAN.SLSMAN_CD instead of SLSMAN_CD when inserting POSM Removal
+   
+=====================================================
+Date		: 20140519
+Baseline version: 6.2.0.0.20140509
+Release version	: 6.2.0.0.20140519
+
+<Brandon>
+1. #0054026: Merchandising Activity | POSM Material Request > found status is OPEN if request submit from HH for ( AUTO approve)
+   Solution: Correct Store Procedure name after uplaod POSM Material Request
+   
+=====================================================
+Date		: 20140509
+Baseline version: 6.2.0.0.20140417
+Release version	: 6.2.0.0.20140509
+
+<Brandon>
+1. #0053126: SCA_X_REWARDHDR_REFRESH > Still pick up record which already paid and over the purge period
+   Solution: Add TXN_DATE to upload to database
+2. #0054026: Merchandising Activity | POSM Material Request > found status is OPEN if request submit from HH for ( AUTO approve)
+   Solution: Add Store Procedure after uplaod POSM Material Request
+   
+=====================================================
+Date		: 20140417
+Baseline version: 6.1.1.0.20140414
+Release version	: 6.2.0.0.20140417
+
+<Ciew Lun>
+1. 	0053527: CA > Comunication TimeOut when download until M_SETUP_TXNNO
+Root Cause: Do not provide Source to Response
+Solution: Add Source to the Response in order to send a response
+Changed: Transaction.xml
+=====================================================
+Date		: 20140414
+Baseline version: 6.1.1.0.20140318
+Release version	: 6.2.0.0.20140414
+
+<Ciew Lun>
+1. Release CA Builder Configured Transaction.Xml
+Changed: Transaction.xml
+=====================================================
+Date		: 20140321
+
+<Release For Engine Upgrade>
+<Ciew Lun>
+1. Include Engine Release Package.
+2. Include CFGTool Folder To Compile CommAgent.Cfg
+3. Add release.txt for Release Version during compile CommAgent.cfg.
+Added: release.txt,CfgTool\, CA_Engine_Release\20140321
+=====================================================
+Date		: 20140318
+Baseline version: 6.1.1.0
+Release version	: 6.2.0.0.20140318
+
+<Hui Sun>
+1. Changed to support new feature on HQ slsman First Download. Added table M_DELEGATION, M_SETUP_DELEGATE, transaction TXN_Setup_Delegate.
+Changed: TableSync.xml, Transaction.xml
+=====================================================
+Date		: 20140225
+Baseline version: 6.1.1.0.20140224B
+Release version	: 6.1.1.0
+
+<Ciew Lun>
+1. Cut Off Version 6.1.1.0
+2. Remove Unuse ReleaseNote File
+=====================================================
+Date		: 20140224
+Baseline version: 6.1.1.0.20140224A
+Release version	: 6.1.1.0.20140224B
+
+<Ciew Lun>
+Rollback Transaction To 6.1.0.0.20140124
+Changed: Transaction.xml
+=====================================================
+Date		: 20140224
+Baseline version: 6.1.1.0.20140224
+Release version	: 6.1.1.0.20140224A
+
+<Sung Chun>
+1. #0052227: R7/R5 > Reward > found record is not updated in BO after paid
+Root Cause: Not able submit signature cause record not updated.
+Solution: Modify DBN size for signature and ensure it is submitted and record is updated.
+
+=====================================================
+Date		: 20140224
+Baseline version: 6.1.0.0.20140221B
+Release version	: 6.1.0.0.20140224
+
+<Ciew Lun>
+1. Transaction Defination Under Stock Transaction Module, Change Transaction Name Txn to TXN as it's Case sensitive when generating Transaction Defination inside Client Code.
+Changed: Transaction.xml
+=====================================================
+Date		: 20140221
+Baseline version: 6.1.0.0.20140221A
+Release version	: 6.1.0.0.20140221B
+
+<Ciew Lun>
+1. Re-Check Syntax of Transaction.XML
+Changed: Transaction.xml
+=====================================================
+Date		: 20140221
+Baseline version: 6.1.0.0.20140221
+Release version	: 6.1.0.0.20140221A
+
+<Ciew Lun>
+1. 	0052266: HH > Stock Transfer In > create txn & submit > rec not submitted to BO
+Transaction "Txn_StkTxn_TransferIn" Missing Column When CA Builder Upgrade.
+Solution: Add back the missing column
+Changed: Transaction.xml
+=====================================================
+Date		: 20140221
+Baseline version: 6.1.0.0.20140219
+Release version	: 6.1.0.0.20140221
+
+<Ciew Lun>
+1. Realign Most of the Transaction to make it as the same structure as Version .1.0.0.20140124 (Before CA Builder Cut Off).
+Changed: Transaction.xml
+=====================================================
+Date		: 20140219
+Baseline version: 6.1.0.0.20140218
+Release version	: 6.1.0.0.20140219
+
+<Ciew Lun>
+1. Version 6.1.0.0.20140210 Plugin From Kwee Mui is Missing Transaction Changes From Version 6.1.0.0.20140102A.
+Re Plug in the changes From 6.1.0.0.20140102A onwards. 
+Changed: Transaction.xml
+
+=====================================================
+Date		: 20140218
+Baseline version: 6.1.0.0.20140210
+Release version	: 6.1.0.0.20140218
+
+<Ciew Lun>
+1. 	0052117: R7Phone/R7Tablet > Found missing appear the change password when first login
+Root Cause: TXN_DownloadTxnNo Assign to Wrong Variable On Response.
+Solution: Correct the variable from FIRST_LOGIN to FIRST_DOWNLOAD
+Changed: Transaction.xml
+
+=====================================================
+Date		: 20140210
+Baseline version: 6.1.0.0.20140124
+Release version	: 6.1.0.0.20140210
+
+<Ciew Lun>
+1. Update Transaction.xml to make it editable through Mobile Builder Version: 7.5.0.2(2014-01-15) onwards.
+=====================================================
+Date		: 20140124
+Baseline version: 6.1.0.0.20140114
+Release version	: 6.1.0.0.20140124
+
+<Ciew Lun>
+1. Remove Ununsed Transaction : TXN_SlsTxn_PromoBudget, Txn_WhsTxn_Count,Txn_WhsTxn_Receipt,Txn_WhsTxn_Transfer
+Changed: Transaction.xml
+=====================================================
+Date		: 20140114
+Baseline version: 6.1.0.0.20140113A
+Release version	: 6.1.0.0.20140114
+
+<Ciew Lun>
+1. M_POSM download image name column
+Changed: TableSync
+
+=====================================================
+Date		: 20140113
+Baseline version: 6.1.0.0.20140113
+Release version	: 6.1.0.0.20140113A
+
+<Brandon>
+1. Add Loc Cd into Price Audit History
+
+=====================================================
+Date		: 20140113
+Baseline version: 6.1.0.0.20140110C
+Release version	: 6.1.0.0.20140113
+
+<Brandon>
+1. Add Price Audit History
+
+=====================================================
+Date		: 20140110
+Baseline version: 6.1.0.0.20140110B
+Release version	: 6.1.0.0.20140110C
+
+<Ying Chen>
+1. Enhancement for category based for Promo Compliance
+File Changed: TableSync,Transaction
+
+=====================================================
+Date		: 20140110
+Baseline version: 6.1.0.0.20140110A
+Release version	: 6.1.0.0.20140110B
+
+<Ciew Lun>
+1. Enhancement for category based for Planogram
+File Changed: TableSync,Transaction
+=====================================================
+Date		: 20140110
+Baseline version: 6.1.0.0.20140110
+Release version	: 6.1.0.0.20140110A
+
+<Sung Chun>
+1. Enhancement for category based for Facing Audit.
+File Changed: Transaction, TableSync
+
+=====================================================
+Date		: 20140110
+Baseline version: 6.1.0.0.20140108
+Release version	: 6.1.0.0.20140110
+
+<Sung Chun>
+1. Enhancement for category based for price audit.
+File Changed: Transaction
+
+=====================================================
+Date		: 20140108
+Baseline version: 6.1.0.0.20140107
+Release version	: 6.1.0.0.20140108
+
+<Sung Chun>
+1. Enhancement for category based for route activity and distribution check.
+File Changed: Transaction, TableSync
+
+=====================================================
+Date		: 20140107
+Baseline version: 6.1.0.0.20140106
+Release version	: 6.1.0.0.20140107
+
+<Ying Chen>
+1. Planogram image handling
+Changed: Transaction, TableSync
+
+=====================================================
+Date		: 20140106
+Baseline version: 6.1.0.0.20140102A
+Release version	: 6.1.0.0.20140106
+
+<Ying Chen>
+1. Add Prd & Customer image handling
+Changed: Transaction, TableSync
+
+=====================================================
+Date		: 20140102
+Baseline version: 6.1.0.0.20140102
+Release version	: 6.1.0.0.20140102A
+
+<Ying Chen>
+1. Manual unlock - add response in TXN_Unlock to prevent bug
+Changed: Transaction
+
+=====================================================
+Date		: 20140102
+Baseline version: 6.1.0.0.20131231
+Release version	: 6.1.0.0.20140102
+
+<Ying Chen>
+1. Manual unlock
+Changed: TableSync, Transaction
+
+=====================================================
+Date		: 20131231
+Baseline version: 6.1.0.0.20131230A
+Release version	: 6.1.0.0.20131231
+
+<Ciew Lun>
+1. Cater Product Image Redownload/ First Download
+Changed: Transacion.
+=====================================================
+Date		: 20131230
+Baseline version: 6.1.0.0.20131230
+Release version	: 6.1.0.0.20131230A
+
+<Ying Chen>
+Add SOX Password Compliance
+Changed: TableSync,Transaction
+
+=====================================================
+Date		: 20131230
+Baseline version: 6.1.0.0.20131226
+Release version	: 6.1.0.0.20131230
+
+<Ciew Lun>
+Add Product Image Download.
+Changed: TableSync,Transaction
+=====================================================
+Date		: 20131226
+Baseline version: 6.1.0.0.20131220A
+Release version	: 6.1.0.0.20131226
+
+<Brandon>
+1. #0050728: R7 Tablet/ Phone > Rewards > found status is still OPEN although BO already approved
+   Solution: Refresh Rewards status
+
+=====================================================
+Date		: 20131220
+Baseline version: 6.1.0.0.20131220
+Release version	: 6.1.0.0.20131220A
+
+<Brandon>
+1. Add Rewards module
+2. Upload Agreement Compliance transaction
+
+=====================================================
+Date		: 20131220
+Baseline version: 6.1.0.0.20131219A
+Release version	: 6.1.0.0.20131220
+
+<Ciew Lun>
+1. Add UOM Code for table M_POSM_MAT. 
+Changed: TableSync.xml
+=====================================================
+Date		: 20131219
+Baseline version: 6.1.0.0.20131219
+Release version	: 6.1.0.0.20131219A
+
+<Brandon>
+1. Add NUM_AGRTP, NUM_AGRCOMP, NUM_REWARD column in M_DAILYCUSTSUM, M_DAILYTIMINGSUM, and M_DAILYTXNSUM transaction
+
+=====================================================
+Date		: 20131218
+Baseline version: 6.0.0.1.20131218
+Release version	: 6.1.0.0.20131219
+
+<Brandon>
+1. Fix Agreement Template transaction insert into transaction table
+
+=====================================================
+Date		: 20131218
+Baseline version: 6.0.0.1.20131216
+Release version	: 6.1.0.0.20131218
+
+<Ying Chen>
+1. Add in HARDWARE_ID for TXN_AUDIT
+File changed: Transaction.xml
+
+=====================================================
+Date		: 20131216
+Baseline version: 6.0.0.1.20131213
+Release version	: 6.0.0.1.20131216
+
+<Brandon>
+1. Plug in Trade Program - Agreement Template from PMI 
+File Changed: Transaction.xml, TableSync.xml
+
+=====================================================
+Date		: 20131213
+Baseline version: 6.0.0.1.20131125
+Release version	: 6.0.0.1.20131213
+
+<John Lai>
+1. Plug in Trade Program - Agreement Compliance from PMI
+File Changed: Transaction.xml, TableSync.xml
+
+=====================================================
+Date		: 20131125
+Baseline version: 6.0.0.1.20131108
+Release version	: 6.0.0.1.20131125
+
+<Ying Chen>
+1. Add X_AUDIT to upload to database TXN_AUDIT_DATA_HHT
+File Changed: Transaction.xml
+
+=====================================================
+Date		: 20131125
+Baseline version: 6.0.0.1.20131108
+Release version	: 6.0.0.1.20131125
+
+<Sung Chun>
+1. #0049610: R5/ R7Phone/R7Tablet > Customer > found there is no feature to view image uploaded by module Customer
+Root Cause: New download method.
+Solution: Change to download the binary file.
+File Changed: TableSync
+
+=====================================================
+Date		: 20131108
+Baseline version: 6.0.0.1.20131107
+Release version	: 6.0.0.1.20131108
+
+<Sung Chun>
+1. #0049230: R7Tablet> Customer Detail > POSM - Description width for the POSM is too small, cant see the full description
+Root Cause: Wrong description downloaded.
+Solution: Download HHT description and product description, HHT description for dropdown and product description for display.
+File Changed: TableSync.xml, Transaction.xml
+
+=====================================================
+Date		: 20131107
+Baseline version: 6.0.0.1.20131106
+Release version	: 6.0.0.1.20131107
+
+<Ying Chen>
+1. 0047922: Survey > Result > Results from HHT are displayed wrongly in Back Office
+Root Cause: CommentFlag in X_SVY_QNADTL was not set as Primary key. The insert reflected as update. 
+Solution: Add Attribute="P" for CommentFlag
+File Changed: Transaction
+
+=====================================================
+Date		: 20131106
+Baseline version: 6.0.0.0.20131029
+Release version	: 6.0.0.1.20131106
+
+<Sung Chun>
+1. #0048962: R7Tablet>Customer Transaction>POSM Material Request-Request for removal, but Cust>POSM qty is not deducted
+Root Cause: Wrong link-table referring.
+Solution: Correct to link to correct header table.
+File Changed: Transaction
+
+=====================================================
+Date		: 20131029
+Baseline version: 6.0.0.0.20131022
+Release version	: 6.0.0.0.20131029
+CA Engine version : V5.0.1.7 TEST 20131029
+
+<Sung Chun>
+1. Download Dynamic Call Card setup value for MUST_DO and ONCE_Only.
+2. Upload TXN_DATE,TXN_STATUS for Dynamic Call Card.
+3. Insert SyncVersion for TXN_MERC_PLANOHDR when upload.
+4. Change to new CA engine to handle image binary downloaded.
+
+=====================================================
+Date		: 20131022
+Baseline version: 6.0.0.0.20131015
+Release version	: 6.0.0.0.20131022
+
+<Sung Chun>
+1. #0048664: HHT>POSM New Installation-After user click on Accept, in BO it does not reflect on the MM>Cust>POSM
+Root Cause: Syntax error on the query.
+Solution: Correct the query.
+File Changed: Transaction.xml
+
+=====================================================
+Date		: 20131015
+Baseline version: 6.0.0.0.20131011
+Release version	: 6.0.0.0.20131015
+
+<Sung Chun>
+1. Did not insert CREATED_BY for TXN_MERC_AGREEMENTHDR hence cannot get the correct running number.
+Solution: Add to insert CREATED_BY.
+File Changed: Transaction.xml
+
+=====================================================
+Date		: 20131011
+Baseline version: 6.0.0.0.20131008
+Release version	: 6.0.0.0.20131011
+
+<Sung Chun>
+1. Change download M_SUB_BRAND to M_BRAND.
+2. Change the upload method for Dynamic Call Card.
+3. Add TXN_KEY to TXN_SURVEY_HDR, change TXN_NO in TXN_SURVEY_DTL,TXN_SURVEY_CMT to TXN_KEY.
+
+=====================================================
+Date		: 20131008
+Baseline version: 6.0.0.0.20131007
+Release version	: 6.0.0.0.20131008
+
+<Sung Chun>
+1. Add Loc_Cd in planogram submission.
+File Changed: Transaction.xml
+
+=====================================================
+Date		: 20131007
+Baseline version: 6.0.0.0.20131006
+Release version	: 6.0.0.0.20131007
+
+<Ciew Lun>
+1. Upload TREEID NODE ID AND LOC_CD when upload Promotion Complience Transaction.
+File Changed: Transaction.xml
+
+=====================================================
+Date		: 20131006
+Baseline version: 6.0.0.0.20131003A
+Release version	: 6.0.0.0.20131006
+
+<Sung Chun>
+1. Enhance price audit module by add in customer location, min price and max price.
+File Changed: Transaction.xml
+
+=====================================================
+Date		: 20131003
+Baseline version: 6.0.0.0.20131003
+Release version	: 6.0.0.0.20131003A
+
+<Ciew Lun>
+1. Add Store Prod For New Promotion Complience Download.
+File Changed: TableSync.xml, Transaction.xml
+
+=====================================================
+Date		: 20131003
+Baseline version: 6.0.0.0.20131001
+Release version	: 6.0.0.0.20131003
+
+<Sung Chun>
+1. Enhance planogram module by add in customer location.
+2. Submit result by add in geo tree id and node id.
+
+File Changed: TableSync.xml, Transaction.xml
+
+=====================================================
+Date		: 20131001
+Baseline version: 6.0.0.0.20130926
+Release version	: 6.0.0.0.20131001
+
+<Sung Chun>
+1. Plug in dynamic call card module.
+2. Add new event to download dynamic call card survey.
+
+File Changed: TableSync.xml, Transaction.xml
+
+=====================================================
+Date		: 20130926
+Baseline version: 6.0.0.0.20130925
+Release version	: 6.0.0.0.20130926
+
+<Sung Chun>
+1. Modify distribution check and price audit data download by add in loc_cd,min_prc,max_prc,prdcat_cd
+2. Add new event to download prd_cat for filtering in distribution check module.
+3. Change distribution check submission records by add in loc_cd.
+4. Remove visi column from submission data to Back Office.
+
+File Changed: TableSync.xml, Transaction.xml
+
+=====================================================
+Date		: 20130925
+Baseline version: 6.0.0.0.20130919
+Release version	: 6.0.0.0.20130925
+
+<Sung Chun>
+1. Modify facing audit data download by add in loc_cd
+2. Add new event to download sub brand for filtering in facing audit module.
+3. Change facing audit submission records by add in loc_cd.
+4. Change route activity submission records by add in custloc_cd and week_month.
+
+File Changed: TableSync.xml, Transaction.xml
+
+=====================================================
+Date		: 20130919
+Baseline version: 6.0.0.0.20130912
+Release version	: 6.0.0.0.20130919
+
+<Sung Chun>
+1. Plug in New Route Activity Module
+2. Add new TableSync - M_CUSTLOC for Customer Location.
+3. Download geotree_cd for M_SETUP_SLSMAN
+File Changed: TableSync.xml,Transaction.xml
+
+=====================================================
+Date		: 20130912
+Baseline version: 5.7.0.0.20130829
+Release version	: 6.0.0.0.20130912
+
+<Sung Chun>
+1. Plug in POSM Module
+File Changed: TableSync.xml,Transaction.xml
+
+=====================================================
+Date		: 20130829
+Baseline version: 5.6.0.1.20130815
+Release version	: 5.7.0.0.20130829
+
+<Ciew Lun>
+1. Remove Area Code From M_Cust and X_Cust
+File Changed: TableSync.xml,Transaction.xml
+=====================================================
+Date		: 20130815
+Baseline version: 5.6.0.1.20130609
+Release version	: 5.7.0.0.20130815
+
+<Ciew Lun>
+1. Add Customer Code in Table Sync : M_TPLHDR
+File Changed: TableSync.xml
+=====================================================
+Date		: 20130609
+Baseline version: 5.6.0.1.20130521
+Release version	: 5.7.0.0.20130609
+
+<SUNG CHUN>
+UPDATE VERSION NUMBER TO 5.7.0.0 FOR CUTOFF VERSION.
+
+=====================================================
+Date		: 20130521
+Release version	: 5.6.0.1.20130521
+Baseline version: 5.6.0.1.20130515
+
+<John Lai>
+1. Upload new column 'PHOTO_STATUS' to table TXN_MERC_PLANOPHT for ACDM take photo indicator.
+File Changed : Transaction.xml
+=====================================================
+Date		: 20130515
+Release version	: 5.6.0.1.20130515
+Baseline version: 5.6.0.1.20130412
+
+<Ciew Lun>
+1. Table Sync "M_CUSTSLSHIST", Add 1 more column to download AMS value.
+=====================================================
+Date		: 20130412
+Release version	: 5.6.0.1.20130412
+Baseline version: 5.6.0.1.20130412
+
+<John Lai>
+1. M_CUSTHIERLBL Add new task to CA in order to download to HHT.
+=====================================================
+Date		: 20130329
+Release version	: 5.6.0.1.20130329
+Baseline version: 5.6.0.1.20130222
+
+<Ciew Lun>
+1. M_RoutePlan Add customer name in order to perform search by name easily in handheld.
+=====================================================
+Date		: 20130222
+Release version	: 5.6.0.1.20130222
+Baseline version: 5.6.0.0.20130103
+
+<John Lai>
+1. Add PLANO_CD and PIC_INDEX as primary key in data upload from X_PLANO_PHT to TXN_MERC_PLANOPHT.
+(Refer issue 0042969: Customer > Time in > Ad hoc > Promotion compliance > Multiple photo captured but only one photo is uploaded to office.)
+
+=====================================================
+Date		: 20130103
+Release version	: 5.6.0.0.20130103
+Baseline version: 5.0.2.0.20121120
+
+<Sung Chun>
+1. Update version from 5.0.2.0 to 5.6.0.0
+
+=====================================================
+Date		: 201201120
+Release version	: 5.0.2.0.20121120
+Baseline version: 5.0.2.0.20121105
+
+<chiao hui>
+[Changes: Merged from RNB]
+
+TableSync.xml
+1. M_PRD > added 'BARCODE' field
+
+=====================================================
+Date		: 20121105
+Release version	: 5.0.2.0.20121105
+Baseline version: 5.0.2.0.20120810
+
+** Please APPLY Update Script in DeveloperReleased/20121105/ before upgrade to this version.
+
+<Sung Chun>
+1. Plot Changes from FC
+File Changed: TableSync, Transaction
+
+=====================================================
+Date		: 20120810
+Release version	: 5.0.2.0.20120810
+Baseline version: 5.0.2.0.20120809
+
+** Please APPLY 1.UpdateSQL.5.0.2.0.20120810A.sql before upgrade to this version.
+
+<Sung Chun>
+1. Images cannot re-download if user changes device.
+Root Cause: If user change device and images is downloaded, image will not able to re-download.
+Solution: Add checking to update download flag for user to re-download images.
+File Changed: Transaction.xml
+
+=====================================================
+Date		: 20120809
+Release version	: 5.0.2.0.20120809
+Baseline version: 5.0.2.0.20120807
+
+** Please APPLY 1.TableStructure.5.0.2.0.20120809.sql and 2.UpdateSQL.5.0.2.0.20120809.sql before upgrade to this version.
+
+<Sung Chun>
+1. Download customer image
+Root Cause: new feature.
+Solution: Add new method to download customer image.
+File Changed: Transaction.xml, TableSync.xml
+
+=====================================================
+Date		: 20120807
+Release version	: 5.0.2.0.20120807
+Baseline version: 5.0.2.0.20120803
+
+<Sung Chun>
+** Remark : Merge in changes from RNB fix. Please apply update script "1.UpdateSQL.5.0.2.0.20120807.sql"
+	=====================================================
+	Release Note For RB Express Communication Agent
+	=====================================================
+
+	Date		: 20120806
+	Release version	: 5.0.0.0.20120806
+	Baseline version: 5.0.0.0.20120803
+
+	<Martha Modi>
+	TableSync.xml
+	-------------
+	1. added M_COMPPRD
+
+	Transaction.xml
+	---------------
+	1. TXN_RefreshAllData > added M_COMPPRD
+
+	------------------------------------------------------------------
+
+=====================================================
+Date		: 20120803
+Release version	: 5.0.2.0.20120803
+Baseline version: 5.0.2.0.20120801
+
+** Please APPLY 1.TableStructure.5.0.2.0.20120803.sql and 2.UpdateSQL.5.0.2.0.20120803A.sql before upgrade to this version.
+
+<Sung Chun>
+1.# Remark field for Route Activities
+Root Cause: --
+Solution: Add new column for remark for non-transaction activities used.
+		  Add remark column field for upload transaction.
+File Changed: Transaction.xml, TableSync.xml
+
+=====================================================
+Date		: 20120801
+Release version	: 5.0.2.0.20120801
+Baseline version: 5.0.2.0.20120724
+
+** Please APPLY UpdateSQL.5.0.1.0.20120801.sql before upgrade to this version.
+
+<Sung Chun>
+1.# Download Route Activity master data
+Root Cause: Did not have master data for Route Activities
+Solution: Download master data with RA_CD, START_DT, END_DT
+File Changed: Transaction.xml, TableSync.xml
+
+=====================================================
+
+Date		: 20120724
+Release version	: 5.0.2.0.20120724
+Baseline version: 5.0.2.0.20120718
+
+<Sung Chun>
+1)#0040055: Merchandising > Merchandising Activity > POSM Maintenance > Fail to show image
+Root Cause: Picture did not upload to back-office.
+Solution: Upload the picture to back-office instead of just the picture name.
+File Changed: Transaction.xml
+
+=====================================================
+
+Date		: 20120718
+Release version	: 5.0.2.0.20120718
+Baseline version: 5.0.1.1.20120615
+
+<Martha Modi>
+TableSync.xml
+-------------
+1. M_RACTIVITY > added RA_CD field
+
+Transaction.xml
+---------------
+1. TXN_RActivity > added RA_CD field
+
+-----------------------------------------------------------------------------
+
+Date		: 20120615
+Release version	: 5.0.1.1.20120615
+Baseline version: 5.0.1.0.20120430
+
+** Merge with Standard DMS
+**Must apply <1.TableStructure.5.0.1.1.20120615>, <2.UpdateSQL5.0.1.1.20120615>, <3.UpdateInitial.5.0.1.1.20120615> database script first.
+
+<Sung Chun><HotFix>
+1. Download planogram image.
+Root Cause: Image not download to HHT.
+Solution: Add new event to download the Image.
+File Changed: TableSync.xml
+
+2. Update Salesman GPS setting when make change at HHT.
+Root Cause: -- 
+Solution: Add new transaction event to update MST_SLSMAN.GPS_IND
+File Changed: Transaction.xml
+
+3. Planogram List display code instead of description.
+Root Cause: No description was downloaded.
+Solution: Download the planogram description.
+File Changed: TableSync.xml
+
+=====================================================
+Date		: 20120413
+Release version	: 5.0.1.0.20120430
+Baseline version: 5.0.0.0.20120301
+
+**Must apply <UpdateInitial.5.0.1.0.20120430>, <UpdateSQL5.0.1.0.20120430>, <TableStructure.5.0.1.0.20120430> database script before upgrade
+
+<Sung Chun>
+Root Cause: Add new feature - GPS function.
+Solution: Retrieve setting from server and update dailytimingsum, dailycustsum, dailytxnsum and customer location coordinate.
+File Changed: Transaction.xml
+
+=====================================================
+Date		: 20120301
+Release version	: 5.0.0.0.20120301
+Baseline version: 5.0.0.0.20120213
+Released by	: BeeTze
+
+** Must apply UpdateSQL5.0.0.0.20120301 database script before upgrade
+
+1. Mantis id: 0036012
+Root cause: Didn't update inventory in Exchange.
+Solution: Update inventory when handheld submit exchange and allow office applicationi to process Open Pending (insufficient) Exchange.
+File Changed: Transaction.xml
+
+=====================================================
+Date		: 20120213
+Release version	: 5.0.0.0.20120213
+Baseline version: 5.0.0.0.20120109
+
+<Sung Chun>
+Resolve:
+1. Mantis ID: 0034482: Customer > Collection > TXN_COLDTL has the cheque_dt and cheque_status = O
+Root Cause: Cheque_dt and Cheque_status have value even there did not have cheque entered.
+Solution: Should not save record for cheque_dt and cheque_status
+File(s) Changes: Tansaction.xml
+
+=====================================================
+Date		: 20120109
+Release version	: 5.0.0.0.20120109
+Baseline version: 5.0.0.0.20110615
+
+<Sung Chun>
+Resolve:
+1. Mantis ID: 0033602: Transaction.xml > Upload Open Items > Aging_cd is taken as primary key causing a transaction is inserted multiple times
+Root Cause: Txn_SlsTxn_Openitems when insert into database will check AGING_CD as one of primary key.
+Solution: Txn_SlsTxn_Openitems: Remove primary key checking for AGING_CD to avoid duplicate record.
+File(s) changed: Tansaction.xml
+
+2. Mantis ID: 0035533: Transaction.xml > User_id should not set as primary key attribute
+Root Cause: TXN_SlsTxn_Return: Record is allow to inserted twice if changes is made in office.
+Solution: Txn_SlsTxn_Openitems: Remove primary key checking for USER_ID to avoid duplicate record.
+File(s) changed: Tansaction.xml
+
+=====================================================
+Date		: 20110615
+Release version	: 5.0.0.0.20110615
+Baseline version: 5.0.0.0.20110608
+
+<ChaiPing>
+Resolve:
+1. HQSalesman > Add 2nd Distributor > Will download Client Release for 2nd time
+-Rootcause: Did not check on the app version of HH when download Client Release
+-Resolution: Add checking on app version of HH when download Client Release
+
+=====================================================
+
+Date		: 20110608
+Release version	: 5.0.0.0.20110608
+Baseline version: 5.0.0.0.20110512
+
+<ChaiPing>
+Resolve:
+1. Download dist with HQ Salesman = Yes > Add new dist with same salesman code > Login page show two same dist code
+-Rootcause: TXN_Setup_Slsman update M_SETUP_SLSMAN table based on Slsman_cd only
+-Resolution: TXN_Setup_Slsman update M_SETUP_SLSMAN table based on Slsman_cd and Dist_cd
+
+=====================================================
+Date		: 20110512
+Release version	: 5.0.0.0.20110512
+Baseline version: 5.0.0.0.20110511
+
+<ChaiPing>
+Resolve:
+1. 0033963: HHT> Communication> Error POP-UP after HHT upgrade version when user do refresh
+-Rootcause: M_SETUP_SLSMAN will not be drop during HHT refresh in TXN_Setup_Slsman hence could not find the new add COMPANY_FLAG column
+-Resolution: Check distributor salesman by create a new table M_SETUP_COMPANYFLAG and remove COMPANY_FLAG at 
+	M_SETUP_SLSMAN table and perform refresh using TXN_Setup_CompFlag
+
+=====================================================
+
+Date		: 20110511
+Release version	: 5.0.0.0.20110511
+Baseline version: 5.0.0.0.20110420
+
+<ChaiPing>
+Resolve:
+1.0033918: HHT> Setup for HQ salesman> Notice HHT able to setup HQ slsman eventhough the slsman company is 'distributors'
+-Rootcause: Do not have checking on the slsman company
+-Resolution: Add in one column COMPANY_FLAG at M_SETUP_SLSMAN and TXN_Setup_Slsman download the data whether slsman company is 
+	    'distributor' or 'principle'
+
+=====================================================
+
+Date		: 20110420
+Release version	: 5.0.0.0.20110420
+Baseline version: 5.0.0.0.20110119
+
+<Tomo>
+Resolve:
+1.0033609: Transaction.xml > Upload Open Items > Aging_cd is taken as primary key causing a transaction is inserted multiple times
+-Rootcause: It set the key aging_cd as primary key.
+-Resolution: Remove 'Attribute="P" in section "TXN_SlsTxn_OpenItems: customer openitems"
+
+=====================================================
+
+Date		: 20110119
+Release version	: 5.0.0.0.20110119
+Baseline version: 5.0.0.0.20101227
+
+<Kenny>
+Resolve:
+1. 0031752: System & Admin Setup > Password > Found no value is displayed in Download Date
+-Rootcause: Update query for download_dt and the download_flag was incorrect.
+-Resolution: query correction for the download_dt and the download_flag to get the right value.
+
+=====================================================
+Date		: 20101227
+Release version	: 5.0.0.0.20101227
+Baseline version: 5.0.0.0.20101007
+
+<TuckWai>
+Resolve:
+1. 0031400: HHT> Sales Order > found the FOC amount is duplicate for Van sales in Hard Allocated in module Promotion Monitor 
+-Rootcause: Extra deduction from transaction.xml and after script of VAn Sales (SCA_INVT_VANORDER_UPDATE)
+-Resolution: Only run the deducation on After script of VAn Sales (SCA_INVT_VANORDER_UPDATE)
+
+=====================================================
+Date		: 20101007
+Release version	: 5.0.0.0.20101007
+Baseline version: 5.0.0.0.20100929
+
+<TuckWai>
+1. Submit WHS_CD and REASON_CD from X_NOTEPRD to TXN_NOTEPRD
+
+
+-----------------------------------------------------------------------------
+Date		: 20100929
+Release version	: 5.0.0.0.20100929
+Baseline version: 5.0.0.0.20100914
+
+<TuckWai>
+
+version upgrade:
+CA Engine > R3Comm_New Version 5.0.0.6
+
+-----------------------------------------------------------------------------
+Date		: 20100914
+Release version	: 5.0.0.0.20100914
+Baseline version: 5.0.0.0.20100830
+
+<Martha Modi>
+FIX:
+1. 0029175: CA > Failed Txn > found "txn_slstxn_return" data in not insert into table M_RETHDR and M_RETPRD  
+-Rootcause: try to upload data into M_RETPRD.CUSTGRP_DISC_PER and M_RETPRD.CUSTGRP_DISC_AMT columns which not 
+	found in database
+-Resolution: remove remove CUSTGRP_DISC_PER and CUSTGRP_DISC_AMT fields from TXN_SlsTxn_Return details as it is
+	not in used anymore
+-Files Changed: Transaction.xml
+
+2. 0028119: Customer > Van Sales > Error converting data type varchar to datetime in CA.
+-Rootcause: the sequence of parameter that been passed to SP SCA_INVT_VANORDER_UPDATE was incorrect
+-Resolution: fix the passing parameter sequence
+-Files Changed: Transaction.xml
+
+3. 0028069: HHT > Customer > Van Sales > Upload to office > Notice that it did not update in database correctly
+Remark: resolved in issue 0028119
+
+4. 0028097: Van Inventory > Van Replenishment > not updated download_dt after submit the van replenishment to HHT. 
+-Rootcause: unable to trigger update sql statement in "Success
+-Resolution: 1. move the update sql statement to "After Call"
+	     2. update VANREP_STATUS='D',DOWNLOAD_DT=download datetime
+-Files Changed: TableSync.xml
+
+
+TableSync.xml
+-------------
+1. M_CUST > add CUSTCLASS_STATUS field
+2. X_VANREPHDR > remove 'Success' component, and replace with "After"
+
+Transaction.xml
+---------------
+1. TXN_SlsTxn_Return > details > remove CUSTGRP_DISC_PER and CUSTGRP_DISC_AMT fields
+2. TXN_SlsTxn_VanOrder > DataDst > Header > TXN_INVOICE > After 
+	-> add ExeSQL SCA_M_CUST_INVCOUNT_UPDATE
+	-> change parameter sequence for ExeSQL SCA_INVT_VANORDER_UPDATE
+
+-----------------------------------------------------------------------------
+
+Date		: 20100830
+Release version	: 5.0.0.0.20100830
+Baseline version: 5.0.0.0.20100825
+
+<Martha Modi>
+Transaction.xml
+---------------
+1. TXN_SlsTxn_Order 
+	> DataSrc - X_ORDPRD, DataDst - TXN_ORDPRD > added DISC_SPENT_AMT field
+	> DataSrc - X_ORDPROMO, DataDst - TXN_ORDPROMO > added DISC_SPENT_AMT field
+2. TXN_SlsTxn_VanOrder 
+	> DataSrc - X_VANORDPRD, DataDst - TXN_INVDTL > added DISC_SPENT_AMT field
+	> DataSrc - X_VANORDPROMO, DataDst - TXN_INVPROMO > added DISC_SPENT_AMT field
+
+-----------------------------------------------------------------------------
+
+Date		: 20100825
+Release version	: 5.0.0.0.20100825
+Baseline version: 5.0.0.0.20100824
+
+Remarks:
+
+ - SCA_INVT_VANORDER_UPDATE was changed to add budget deduction
+
+1.Fix Issue: 0027497 - Change on SP:SCA_X_VANREPPRD_REFRESH
+2.Fix Issue: 0028323 - Change on SP:SCA_M_PROMO_REFRESH
+3.Fix Issue: 0028173 - Change on SP:SCA_M_PRDPRC_REFRESH
+
+-----------------------------------------------------------------------------
+
+Date		: 20100824
+Release version	: 5.0.0.0.20100824
+Baseline version: 5.0.0.0.20100823
+
+<Martha Modi>
+
+version upgrade:
+CA Engine > R3Comm_New Version 5.0.0.5
+
+TableSync.xml
+-------------
+1. added M_PROMO_RECURRIN
+
+
+Transaction.xml
+---------------
+1. TXN_RefreshAllData > added M_PROMO_RECURRIN
+2. TXN_SlsTxn_Order 
+	> DataSrc - X_ORDPRD, DataDst - TXN_ORDPRD > added CUST_GRP_DISC field
+	> DataSrc - X_ORDPROMO, DataDst - TXN_ORDPROMO > added PRD_BUY, TTL_BUY, TTL_DISC_AMT fields
+3. TXN_SlsTxn_VanOrder 
+	> DataSrc - X_VANORDPRD, DataDst - TXN_INVDTL > added CUST_GRP_DISC field
+	> DataSrc - X_VANORDPROMO, DataDst - TXN_INVPROMO > added CLAIM_IND, CLAIMABLE_IND, BUDGET_AMT fields
+
+-----------------------------------------------------------------------------
+
+Date		: 20100823
+Release version	: 5.0.0.0.20100823
+Baseline version: 5.0.0.0.20100805
+
+<Martha Modi>
+TableSync.xml
+-------------
+1. 0028033: System & Admin Setup > Password > Download date column is empty 
+	- Update download flag correctly
+2. 0026148: First Time setup > No validation checking on case sensitive for distributor & salesman code
+
+-----------------------------------------------------------------------------
+
+Date		: 20100805
+Release version	: 5.0.0.0.20100805
+Baseline version: 5.0.0.0.20100408
+
+<Martha Modi>
+TableSync.xml
+-------------
+1. M_CUST2 > add BILLTO_CD field
+
+Transaction.xml
+---------------
+1. TXN_SlsTxn_Return
+	> dest header > add After to call SP SCA_INVT_HHTRETURN_UPDATE
+	> detail > add CUSTGRP_DISC_PER, and CUSTGRP_DISC_AMT fields
+2. TXN_SlsTxn_Collection > dest header > add HHT_SYNCVERSION field
+
+
+<add promotion>
+TableSync.xml
+-------------
+1. added M_PROMODTL, M_PROMOPRD_EX, M_PROMOFOC
+2. M_PROMO, M_PROMOPRD > modified fields
+
+Transaction.xml
+---------------
+1. TXN_RefreshAllData > added M_PROMODTL, M_PROMOPRD_EX, M_PROMOFOC
+
+-----------------------------------------------------------------------------
+
+Date		: 20100408
+Release version	: 5.0.0.0.20100408
+Baseline version: 5.0.0.0.20100407
+
+<Martha Modi>
+FIX:
+1. 0026148: First Time setup > No validation checking on case sensitive for distributor & salesman code 
+-Rootcause: cheaking on distributor and slsman code did not have case sensitive checking
+-Resolution: add "COLLATE SQL_Latin1_General_CP1_CS_AS" to have allow case sensitive checking. make change in:
+	TXN_Setup_Slsman > DataDst > Header > After for Name="UserName"
+-Files Changed: Transaction.xml
+
+Transaction.xml
+---------------
+1. TXN_SlsTxn_VanOrder > dest header > After > add parameter '#TXN_NO#' to called SP SCA_INVT_VANORDER_UPDATE
+
+-----------------------------------------------------------------------------
+
+Date		: 20100407
+Release version	: 5.0.0.0.20100407
+Baseline version: 5.0.0.0.20100331
+
+<Martha Modi>
+FIX (Issue reported for Nestle DMSOne):
+Transaction.xml
+---------------
+1. (0025565) TXN_SlsTxn_Return, TXN_SlsTxn_TempCN > Header > add TAXABLE_AMT, and NONTAXABLE_AMT fields
+
+-----------------------------------------------------------------------------
+
+Date		: 20100331
+Release version	: 5.0.0.0.20100331
+Baseline version: 5.0.0.0.20100325
+
+<Martha Modi>
+FIX (Issue reported for Nestle DMSOne):
+Transaction.xml
+---------------
+1. (0025275) TXN_SlsTxn_VanOrder > dest header > After > add parameter '#TXN_DT#' to called SP SCA_INVT_VANORDER_UPDATE
+
+2. 0025037: Stock Replenishment > Rejected replenishment > error occur in CA log
+-Rootcause: record belong to @COMP_CD, @WHS_CD does not exists in INVT_MASTER. Thus, return NULL for PK fields DIST_CD,WHS_CD
+-Resolution: use @COMP_CD,@WHS_CD as DIST_CD,WHS_CD values respectively
+-Files Changed: SP: SCA_INVT_VANREP_UPDATE
+
+-----------------------------------------------------------------------------
+
+Date		: 20100325
+Release version	: 5.0.0.0.20100325
+Baseline version: 5.0.0.0.20100322
+
+<Martha Modi>
+FIX (Issue reported for Nestle DMSOne):
+Transaction.xml
+---------------
+1. (0025076) TXN_SlsTxn_Order > dest detail, TXN_ORDPRD > change value for ORG_QTY from PRD_QTY to QTY_SMLUOM
+
+-----------------------------------------------------------------------------
+
+Date		: 20100322
+Release version	: 5.0.0.0.20100322
+Baseline version: 5.0.0.0.20100311
+
+<Martha Modi>
+Transaction.xml
+---------------
+1. added TXN_SlsTxn_Exchange
+2. TXN_StkTxn_Invt, Txn_StkTxn_InvtHist > added EXG_GOOD_OUT, EXG_GOOD_IN, EXG_BAD_IN fields
+3. TXN_DailyCustSum, TXN_DailyTimingSum, TXN_DailyTxnSum > added NUM_EXG, and EXG_AMT fields
+
+-----------------------------------------------------------------------------
+
+Date		: 20100311
+Release version	: 5.0.0.0.20100311
+Baseline version: 5.0.0.0.20100223
+
+<Martha Modi>
+Transaction.xml
+---------------
+1. TXN_SlsTxn_VanOrder > added FULL_REVERS_IND, and FULL_REVERSAL_IND fields in datasrc header
+	and datadest header respectively
+
+-----------------------------------------------------------------------------
+
+Date		: 20100223
+Release version	: 5.0.0.0.20100223
+Baseline version: 5.0.0.0.20100218
+
+<Martha Modi>
+TableSync.xml
+-------------
+1. M_CUST, X_CUST > added CUST_HIER1, and CUST_HIER2 fields
+
+Transaction.xml
+---------------
+1. TXN_NewCust > added CUST_HIER1, and CUST_HIER2 fields
+
+-----------------------------------------------------------------------------
+
+Date		: 20100218
+Release version	: 5.0.0.0.20100218
+Baseline version: 5.0.0.0.20100210
+
+<Martha Modi>
+TableSync.xml
+-------------
+1. added M_PRDPRC_DKA
+
+Transaction.xml
+---------------
+1. TXN_RefreshAllData > added M_PRDPRC_DKA
+
+-----------------------------------------------------------------------------
+
+Date		: 20100210
+Release version	: 5.0.0.0.20100210
+Baseline version: 5.0.0.0.20100130
+
+<Martha Modi>
+TableSync.xml
+-------------
+1. M_PRFMHDR > added DAILY_SALES_TGT field
+
+Transaction.xml
+---------------
+1. TXN_SlsTxn_TempCN > dest detail > add WHS_CD, and REASON_CD fields and set value=''
+
+-----------------------------------------------------------------------------
+
+Date		: 20100130
+Release version	: 5.0.0.0.20100130
+Baseline version: 5.0.0.0.20091230
+
+<Martha Modi>
+Initial release
+
+-----------------------------------------------------------------------------
+
+Date		: 20091230
+Release version	: 5.0.0.0.20091230
+Baseline version: 5.0.2.2.20091222
+
+<Jason Yep>
+Initial Version
+
+
